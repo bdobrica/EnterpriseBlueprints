@@ -19,13 +19,12 @@ Examples:
 refund_count == 1
 ticket_status == resolved
 JSON conforms to schema
-required tool was invoked
-forbidden tool was not invoked
 database row exists
-latency < threshold
 ```
 
-This is cheaper, reproducible, and usually easier to debug than asking another model to infer the outcome.
+Process-contract checks can additionally verify that a required tool was invoked or a forbidden tool was avoided when the product contract truly specifies the path, rather than only the outcome. Latency and cost are measured operational variables, not deterministic evaluator results.
+
+Objective checks are cheaper, reproducible, and usually easier to debug than asking another model to infer the outcome.
 
 ### 15.2 Model-based evaluators
 
@@ -52,9 +51,14 @@ judge_prompt
 rubric
 input contract
 output contract
+sampling parameters and seed when supported
 ```
 
 Every emitted score retains that provenance.
+
+Candidate content is untrusted input to the evaluator. The judge runs without tools or production credentials, receives candidate output in a clearly delimited data field, and uses an output schema that cannot be altered by instructions embedded in that content.
+
+For comparative judgment, candidate labels are blinded and presentation order is randomized. Reports expose order-specific results and permit abstention when the rubric cannot support a reliable choice. These controls are part of the initial evaluator because unblinded or fixed-order judging can systematically favor a candidate.
 
 ### 15.3 Calibration
 
@@ -71,6 +75,8 @@ compare with human labels
       ▼
 agreement / error analysis
 ```
+
+Calibration measures agreement, false-positive and false-negative rates, abstention, and uncertainty on representative slices. Aggregate agreement alone can hide poor performance on a safety-critical language, customer segment, or task class.
 
 This prevents a change in evaluator implementation from being mistaken for a change in candidate quality.
 
@@ -98,9 +104,6 @@ Future versions can add:
 
 ```text
 cross-evaluator audits
-blind pairwise judging
-order randomization
-abstention
 drift alerts
 judge-family bias analysis
 agentic judges

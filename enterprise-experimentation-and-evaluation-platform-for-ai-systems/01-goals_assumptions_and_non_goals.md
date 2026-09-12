@@ -46,6 +46,8 @@ Historical experiment results should remain interpretable after prompts, models,
 
 Experiment evidence should be suitable for both engineering diagnosis and statistical analysis.
 
+Every decision-grade online experiment should define the causal estimand, pre-treatment analysis population, randomization unit, observation window, and stopping rule before exposure begins.
+
 The architecture should support hundreds or thousands of application requests per second while allowing telemetry and offline workloads to scale independently.
 
 ### 2.2 Assumptions
@@ -60,6 +62,10 @@ A model provider may perform retries or fallbacks internally or through a gatewa
 
 Business outcomes can arrive after the original AI execution has completed.
 
+Telemetry can be duplicated, delayed, corrected, delivered out of order, or lost, and that loss can differ across execution paths.
+
+External providers may change implementation behind a stable public model identifier and may not support deterministic replay.
+
 User feedback is normally sparse and self-selected.
 
 Model-based evaluators are themselves probabilistic systems.
@@ -67,6 +73,8 @@ Model-based evaluators are themselves probabilistic systems.
 Some experimental treatments modify persistent state.
 
 Several experiments may eventually coexist within one pipeline.
+
+Subjects can interfere through shared accounts, queues, caches, memories, tools, or social relationships.
 
 ### 2.3 Non-goals
 

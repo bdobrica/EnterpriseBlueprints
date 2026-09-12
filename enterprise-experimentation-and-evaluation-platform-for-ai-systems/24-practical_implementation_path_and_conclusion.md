@@ -12,9 +12,11 @@ pipeline manifest
 subject types
 assignment algorithm
 assignment ID
+eligibility and pre-treatment trigger
 exposure semantics
 experiment event schema
 metric schema
+estimand and analysis-population schema
 evaluator schema
 dataset/scenario schema
 execution-purpose taxonomy
@@ -22,7 +24,7 @@ execution-purpose taxonomy
 
 Create cross-language assignment conformance tests.
 
-Run simulated and real A/A tests.
+Run simulated A/A tests. Real production A/A tests begin after the online core and minimum security controls exist.
 
 ### Stage 1 — online experimentation core
 
@@ -42,6 +44,11 @@ exposure ingestion
 outcome ingestion
 feedback ingestion
 
+authenticated tenant isolation and service identity
+publication approval and append-only audit
+privacy classification, retention, and deletion policy
+encrypted local evidence spool
+
 PostgreSQL
 event stream
 ClickHouse
@@ -49,6 +56,7 @@ ClickHouse
 fixed-horizon binary/continuous analysis
 confidence intervals
 SRM detection
+multiplicity and data-completeness checks
 basic experiment UI
 ```
 
@@ -60,6 +68,8 @@ Add:
 
 ```text
 OpenTelemetry integration
+W3C trace-context propagation
+authenticated experiment-context envelope
 experiment trace attributes
 pipeline provenance
 model usage
@@ -68,6 +78,7 @@ token counts
 tool spans
 retrieval spans
 workflow IDs
+payload redaction and egress filtering
 ```
 
 The event ledger remains independent of trace retention.
@@ -83,6 +94,8 @@ scenario runner
 resettable sandboxes
 deterministic evaluators
 model-based evaluators
+blind labels and randomized judge order
+judge prompt-injection isolation and abstention
 repeated trials
 human calibration dataset
 ```
@@ -97,6 +110,9 @@ Add:
 production input sampling
 shadow dispatcher
 side-effect suppression
+read-only snapshots or replicas
+no production write credentials
+deny-by-default tool and network policy
 shadow budgets
 candidate evaluation
 shadow trace comparison
@@ -104,7 +120,7 @@ shadow trace comparison
 
 Shadow evidence remains separate from causal online experiment results.
 
-### Stage 5 — operational safety and enterprise controls
+### Stage 5 — operational safety and enterprise hardening
 
 Add:
 
@@ -112,10 +128,10 @@ Add:
 per-execution budgets
 variant spend limits
 circuit breakers
-SSO
-RBAC
-audit
-retention
+SSO and identity federation
+fine-grained authorization and just-in-time raw-data access
+independently retained tamper-evident audit
+advanced retention and legal-hold policy
 data residency
 payload capture policies
 private networking
@@ -146,7 +162,7 @@ holdouts
 experiment layers
 cluster randomization
 ratio metrics
-multiple-comparison correction
+hierarchical and false-discovery-rate procedures
 adaptive allocation
 ```
 
@@ -186,13 +202,13 @@ The experiment ledger connects assignment to outcomes over longer periods.
 
 Offline scenarios test pipeline candidates from controlled initial state.
 
-Shadow execution tests candidate behavior against production input distributions without exposing users.
+Shadow execution tests candidate behavior against production input distributions without creating production side effects.
 
 Online randomized experiments estimate changes in user or business outcomes.
 
 Evaluators remain versioned measurement instruments.
 
-Statistical analysis operates on the randomization unit rather than on whichever telemetry objects happen to be easiest to query.
+Statistical analysis starts from a pre-treatment trigger and a declared estimand, then operates on the randomization unit rather than on whichever telemetry objects happen to be easiest to query. Event-time, correction, censoring, and data-completeness rules preserve outcome meaning when evidence arrives late or changes.
 
 This produces a platform whose first implementation can remain relatively small:
 
@@ -217,6 +233,7 @@ The architecture is successful when a reviewer can return to an experiment month
 
 ```text
 what population was randomized
+what trigger, estimand, and stopping rule were declared
 what treatment each subject was assigned
 what pipeline that treatment represented
 what actually executed

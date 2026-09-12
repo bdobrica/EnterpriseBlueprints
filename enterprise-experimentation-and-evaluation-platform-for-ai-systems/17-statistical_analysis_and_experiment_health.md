@@ -17,14 +17,19 @@ Before launch, an experiment records:
 
 ```text
 primary metric
+estimand, analysis population, and trigger
 planned stopping rule
 planned sample size or duration
+minimum detectable effect and power
+allocation ratio
 confidence level
+observation and correction windows
+expected data delay
 ```
 
 Interim estimates can be displayed operationally.
 
-The platform should not encourage repeatedly inspecting an ordinary fixed-horizon p-value and stopping when it becomes favorable.
+The platform should not encourage repeatedly inspecting an ordinary fixed-horizon p-value and stopping when it becomes favorable. A confirmatory result is calculated only at the declared horizon or under another stopping rule published before exposure.
 
 Sequential inference can be added later when continuous stopping decisions are required.
 
@@ -49,6 +54,8 @@ confidence interval
 sample sizes
 ```
 
+Confidence intervals use a score/Newcombe method or a regression method with appropriate robust uncertainty. A simple Wald interval is not the default because it performs poorly for rare outcomes and small samples.
+
 ### 18.3 Continuous metrics
 
 Examples:
@@ -60,11 +67,13 @@ token count
 resolution time
 ```
 
-The implementation should allow unequal-variance methods rather than assuming treatment and control have identical variance.
+For per-unit means, the implementation uses unequal-variance or heteroskedasticity-robust methods rather than assuming identical variance. Heavy-tailed metrics require a predeclared transformation, trimming or robust estimator, and reports retain interpretable raw-scale summaries. Ratio and quantile metrics remain unsupported until their corresponding estimators and validation tests exist.
+
+All analyses apply the published observation window. The fixed-horizon MVP waits for included units to mature before final analysis and reports data completeness explicitly. A time-to-event estimand with right censoring requires a declared survival-analysis method and remains unsupported until that method is implemented; immature units are never silently dropped.
 
 ### 18.4 Sample ratio mismatch
 
-The platform continuously compares observed randomization-unit counts with the configured allocation.
+The platform compares assignment counts at the randomization unit with the configured allocation on a predefined cadence and threshold. Exposure imbalance is reported separately: it can reveal post-assignment execution or instrumentation failures but is not the same SRM test.
 
 Microsoft has documented SRM as a high-value indicator of experiment data-quality and randomization problems.
 
@@ -77,7 +86,7 @@ DEGRADED
 INVALID
 ```
 
-A significant unexplained SRM should result in:
+A significant SRM first triggers diagnosis of scope, bot/filter rules, duplicate handling, config revisions, and telemetry completeness. A significant unexplained SRM should result in:
 
 ```text
 INVALID
@@ -85,7 +94,15 @@ INVALID
 
 rather than an ordinary winner/loser result accompanied by a small warning.
 
-### 18.5 A/A testing
+The threshold and monitoring cadence are fixed in advance; repeatedly testing many slices and times without accounting for those looks creates false alarms.
+
+### 18.5 Multiplicity and interpretation
+
+Each iteration has one confirmatory primary metric. Secondary metrics are exploratory unless included in a predefined family with an adjustment such as Holm's procedure. Inferential guardrails use their own predefined family or non-inferiority policy; streaming operational thresholds remain circuit-breaker signals.
+
+Reports lead with the effect estimate and confidence interval. A binary significance label does not establish practical value, safety, or absence of harm.
+
+### 18.6 A/A testing
 
 Before the platform is trusted for production decisions, it should run repeated A/A experiments.
 
@@ -100,7 +117,7 @@ confidence-interval calibration
 false-positive behavior
 ```
 
-### 18.6 Future analysis methods
+### 18.7 Future analysis methods
 
 The data model should support later addition of:
 
@@ -108,7 +125,7 @@ The data model should support later addition of:
 CUPED
 sequential testing
 ratio-metric estimators
-multiple-comparison correction
+hierarchical and false-discovery-rate procedures
 cluster-aware estimators
 persistent holdouts
 heterogeneous treatment analysis

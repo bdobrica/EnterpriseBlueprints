@@ -28,6 +28,9 @@ author
 labels
 privacy classification
 difficulty/tags
+source population and inclusion rule
+lineage and deduplication group
+consent or other governing data basis
 ```
 
 A dataset snapshot records its complete scenario membership.
@@ -46,7 +49,7 @@ adversarial cases
 capability tests
 ```
 
-Evaluation reports should expose dataset composition.
+Evaluation reports should expose dataset composition and results by declared slice. When a snapshot is intended to represent production, the sampling weights or population mismatch must also be reported.
 
 ### 16.3 Development and release sets
 
@@ -58,7 +61,7 @@ calibration dataset
 held-out release dataset
 ```
 
-Access to held-out sets can be restricted.
+Access to held-out sets can be restricted, with labels hidden from candidate authors and access logged. Split assignment occurs by deduplication group so the same user, conversation, incident, or near-duplicate does not cross development, calibration, and release sets. Published snapshots and split membership are immutable.
 
 ### 16.4 Production loop
 
@@ -77,7 +80,7 @@ scenario authoring
 dataset snapshot
     │
     ▼
-offline A/B evaluation
+offline paired comparison
     │
     ▼
 shadow candidate

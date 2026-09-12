@@ -1,6 +1,6 @@
 # Designing an Enterprise Experimentation and Evaluation Platform for AI Systems
 
-**Revision: 0.1.1**
+**Revision: 0.2.0**
 
 This document describes a vendor-neutral architecture for evaluating changes to AI systems through offline evaluation, shadow execution, and online controlled experimentation. The platform treats models, prompts, retrieval systems, memory, tools, agent runtimes, policies, and complete agent pipelines as versioned treatments that can be evaluated using a common evidence model.
 
@@ -73,7 +73,7 @@ Experiment events record assignment, exposure, outcomes, feedback, and evaluatio
 
 The **offline evaluation plane** executes pipeline variants against versioned scenarios inside resettable environments.
 
-The **shadow plane** executes candidate pipelines against copies of real production inputs without exposing candidate output or side effects to users.
+The **shadow plane** executes candidate pipelines against copies of real production inputs without creating production side effects.
 
 The **analysis plane** aggregates observations at the correct experimental unit and performs statistical analysis.
 
@@ -86,7 +86,11 @@ continuous metrics
 95% confidence intervals
 sample ratio mismatch detection
 fixed-horizon analysis
+predeclared estimands and analysis populations
+one confirmatory primary metric and multiplicity-controlled guardrails
 ```
+
+Online admission uses a treatment-blind pre-assignment trigger. Assignment is durably spooled before execution, and exposure is durably recorded at the published treatment-dispatch boundary. Outcome processing uses explicit event-time, correction, censoring, and data-completeness rules.
 
 More advanced methods such as CUPED, sequential testing, experiment layers, persistent holdouts, cluster randomization, and adaptive allocation fit the same architecture but are not required for the first implementation.
 

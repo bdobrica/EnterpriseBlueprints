@@ -9,12 +9,19 @@ metric_id
 metric_version
 description
 source
+estimand
+analysis population and denominator
 analysis_unit
 aggregation
 directionality
 attribution_window
 missing-data behavior
+censoring rule
+outlier or transformation policy
+uncertainty method
 ```
+
+Rates with random denominators, ratios, and quantiles require estimators that match their structure; they are not treated as ordinary means merely because a dashboard can compute them.
 
 ### 17.1 Metric categories
 
@@ -42,6 +49,8 @@ escalation rate
 response latency
 ```
 
+Secondary metrics are exploratory unless the published analysis plan places them in a multiplicity-controlled confirmatory family.
+
 #### Guardrail metrics
 
 Outcomes that should not regress beyond acceptable bounds.
@@ -54,6 +63,8 @@ policy violations
 p95 latency
 cost per task
 ```
+
+A guardrail states whether it is an inferential non-inferiority claim or an operational safety threshold. Those are separate decisions. For example, a streaming p95 latency threshold can pause traffic, while a causal statement about the treatment's p95 requires a valid quantile estimator and its declared uncertainty method.
 
 #### Diagnostic metrics
 
@@ -115,6 +126,6 @@ Per-execution budgets can be enforced immediately.
 
 Aggregate variant budgets depend on streaming observations and configuration propagation.
 
-The platform should therefore document a maximum pause-propagation delay rather than implying globally instantaneous shutdown while preserving local decisioning.
+The platform should therefore document a maximum pause-propagation delay rather than implying globally instantaneous shutdown while preserving local decisioning. Aggregate breakers define a minimum evidence volume, data-freshness requirement, hysteresis, cool-down, and audited manual override so a delayed or noisy sample does not repeatedly flap enrollment.
 
 ---

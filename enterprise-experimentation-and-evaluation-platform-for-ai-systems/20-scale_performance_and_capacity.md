@@ -52,6 +52,8 @@ Ingestion services remain stateless.
 
 Events are acknowledged after acceptance by the durable stream rather than after ClickHouse analysis completes.
 
+Producers submit asynchronously through a bounded, encrypted local evidence spool. Assignment is appended before execution, and exposure is appended at the published treatment boundary before treatment dispatch; network acknowledgement remains off the request's critical path.
+
 ### 21.4 Backpressure
 
 If downstream systems are overloaded:
@@ -63,7 +65,7 @@ evaluation work → queue
 offline runs → throttle
 ```
 
-The serving application should not block on analytical backpressure.
+The serving application should not block on analytical backpressure. If the evidence spool is full or its durability guarantee fails, the application admits no new experimental exposure and serves the declared baseline behavior. It reports the gap when telemetry recovers. Already exposed pinned workflows follow their published outage policy.
 
 ### 21.5 Trace sampling
 
@@ -72,7 +74,7 @@ Experiment events required for analysis should not rely on trace sampling.
 Diagnostic traces can use:
 
 ```text
-small unbiased baseline sample
+small baseline sample selected before outcomes are observed
 +
 100% retention of selected anomalies
 ```
@@ -88,6 +90,8 @@ human escalation
 ```
 
 The two samples should be distinguishable.
+
+Baseline sampling uses treatment-blind keys and probabilities recorded with the trace. Tail or anomaly retention is a separate post-outcome mechanism and is never analyzed as a representative population.
 
 Failure-enriched trace samples are useful for diagnosis but are not representative experiment datasets.
 
@@ -121,5 +125,7 @@ region-scoped object storage
 while maintaining a logically unified control plane.
 
 Data-residency policy determines whether raw payloads may leave the originating region.
+
+Every region reports active config revision, validity, and activation status. Mixed revisions or regional split-brain mark experiment health as degraded and can stop new enrollment until convergence.
 
 ---

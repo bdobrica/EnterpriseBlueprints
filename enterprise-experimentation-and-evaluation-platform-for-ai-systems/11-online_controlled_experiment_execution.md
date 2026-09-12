@@ -12,12 +12,18 @@ resolve randomization subject
 evaluate eligibility
    │
    ▼
+evaluate pre-treatment trigger
+   │
+   ▼
 deterministic local assignment
+   │
+   ▼
+durably spool assignment
    │
    ▼
 execute assigned pipeline
    │
-   ├── exposure
+   ├── durable exposure at each published treatment boundary
    │
    ├── trace
    │
@@ -48,7 +54,7 @@ application version >= X
 feature capability available
 ```
 
-Eligibility should not depend on post-treatment outcomes.
+Eligibility and the analysis trigger are immutable, treatment-blind, and evaluated before assignment. Neither may depend on post-treatment control flow, exposure, or outcomes.
 
 ### 12.2 Subject materialization
 
@@ -64,9 +70,12 @@ exposed
 ticket_resolution
 total_cost
 error_count
+observation_window_complete
 ```
 
 One user remains one randomized unit regardless of how many traces or model calls the user's workload generated.
+
+Materialization starts from all admitted assignments, then left-joins outcomes using the published attribution rule. It defines aggregation within a unit, missing-outcome behavior, and right-censoring before results are calculated. Starting from exposed or outcome-bearing rows would discard randomized subjects and bias the population.
 
 ### 12.3 Delayed outcomes
 
@@ -78,7 +87,7 @@ Example:
 renewal within 14 days after assignment
 ```
 
-Late-arriving data can revise experiment aggregates until the attribution window closes.
+Late-arriving data can revise experiment aggregates until the attribution and correction windows close. Watermarks and source-completeness checks determine whether a result is provisional; wall-clock experiment completion alone does not make delayed outcomes final.
 
 ### 12.4 Decision record
 
@@ -91,6 +100,10 @@ sample size
 health state
 metric versions
 analysis version
+estimand and analysis population
+stopping and multiplicity rules
+data-completeness state
+protocol deviations
 decision
 ```
 

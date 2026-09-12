@@ -43,9 +43,12 @@ Events use:
 event_id
 schema_version
 tenant/project context
-event timestamp
-producer timestamp
+occurred, observed, and ingested timestamps
+producer and source fact identity
+correction or retraction reference
 ```
+
+A schema registry enforces compatibility rules. Invalid or unknown-schema records enter a quarantine stream with visible health counters instead of being partially interpreted.
 
 ### 20.3 ClickHouse
 
@@ -61,7 +64,7 @@ span metadata
 materialized experiment-unit metrics
 ```
 
-The schema should favor append-oriented ingestion.
+The schema should favor append-oriented ingestion. ClickHouse is a derived analytical projection rather than the sole copy of experimental truth; it can be rebuilt from the versioned raw event archive and materialization definitions.
 
 ### 20.4 Object storage
 
@@ -74,7 +77,7 @@ tool results
 retrieved documents
 dataset artifacts
 scenario fixtures
-raw event archives
+canonical raw event archive
 Parquet exports
 ```
 
@@ -124,5 +127,7 @@ raw archives            policy-dependent
 ```
 
 Deleting a prompt payload should not require deleting the experiment assignment needed to preserve aggregate historical analysis.
+
+Deletion propagates to replicas, derived indexes, exports, and backups according to policy. A durable tombstone prevents deleted content from reappearing during archive replay. Aggregate results retain lineage to the deletion policy; when erasure removes required source facts, the platform records that exact historical replay is no longer possible.
 
 ---

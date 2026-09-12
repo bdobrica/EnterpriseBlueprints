@@ -38,7 +38,9 @@ The architecture separates the serving-critical path from measurement and analys
                    ┌───────────────────┴───────────────────┐
                    │                                       │
                    ▼                                       ▼
-             OpenTelemetry                           Experiment Events
+             OpenTelemetry                    Durable evidence spool
+                                                        │
+                                                 Experiment Events
                    │                                       │
                    └───────────────────┬───────────────────┘
                                        ▼
@@ -50,7 +52,8 @@ The architecture separates the serving-critical path from measurement and analys
             │                          │                       │
             ▼                          ▼                       ▼
         ClickHouse                Object Storage          Eval Queue
-     hot analytics/traces       artifacts/raw data             │
+       derived analytics      canonical event archive         │
+                              and versioned artifacts          │
                                                              ▼
                                                       Evaluator Workers
 
@@ -108,6 +111,7 @@ Applications evaluate:
 
 ```text
 eligibility
+pre-treatment trigger
 enrollment
 assignment
 ```
@@ -120,7 +124,7 @@ LinkedIn has documented deterministic hash-based local variant assignment as a w
 
 OpenTelemetry records execution structure.
 
-The experiment event stream records causal bookkeeping.
+The experiment event stream records assignment, exposure, and outcome bookkeeping. Producers use a bounded durable local spool so new treatment execution is not admitted when core evidence cannot be retained. The canonical archive, event schemas, and versioned materialization rules make this evidence reproducible; ClickHouse remains a replaceable query projection.
 
 These are separate logical data products even when they share transport or storage infrastructure.
 

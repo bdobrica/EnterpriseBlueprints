@@ -1,6 +1,6 @@
 ## 10. Experiment context and distributed tracing
 
-The platform should use OpenTelemetry rather than defining a proprietary tracing protocol.
+The platform should use OpenTelemetry and the W3C Trace Context format rather than defining a proprietary tracing protocol.
 
 OpenTelemetry semantic conventions provide a common vocabulary for telemetry, including current GenAI-specific conventions.
 
@@ -43,7 +43,7 @@ For example, an LLM judge invoking the same model gateway should not accidentall
 
 Services participating in one execution need access to experiment context.
 
-A small internal context envelope can propagate:
+A small authenticated internal context envelope can propagate:
 
 ```text
 assignment ID
@@ -51,13 +51,16 @@ variant
 pipeline ID
 workflow ID
 execution purpose
+issuer and audience
+issued-at and expiration time
+signing key ID
 ```
 
 alongside normal W3C trace context.
 
 OpenTelemetry baggage can propagate contextual values, but its documentation notes that baggage can leak to unintended downstream services and has no built-in integrity protection.
 
-For treatment identity, a signed internal context envelope is therefore preferable when crossing service boundaries.
+For treatment identity, a signed internal context envelope is therefore preferable when crossing service boundaries. Receivers derive tenant and treatment identity from authenticated workload context and this envelope; they reject conflicting caller-supplied fields, expired envelopes, and unauthorized audiences.
 
 Before calling external model providers or third-party tools, experimentation context should be removed unless forwarding has been explicitly approved.
 
@@ -97,6 +100,6 @@ Did B require more retries?
 
 Those are diagnostic questions.
 
-Trace differences are not automatically causal effect estimates.
+Trace differences are not automatically causal effect estimates. Trace attributes are diagnostic evidence and may be sampled or dropped; decision-grade assignment, exposure, and outcome facts are reconciled against the experiment event ledger.
 
 ---

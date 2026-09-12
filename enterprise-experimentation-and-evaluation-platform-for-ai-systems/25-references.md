@@ -29,3 +29,9 @@
 14. Microsoft Experimentation Platform. *Experimentation Platform Publications*. https://www.microsoft.com/en-us/research/group/experimentation-platform-exp/publications/
 
 15. OpenTelemetry. *Signals*. https://opentelemetry.io/docs/concepts/signals/
+
+16. Pavel Dmitriev et al. *Trustworthy Experimentation Under Telemetry Loss*. Microsoft Research. https://www.microsoft.com/en-us/research/publication/trustworthy-experimentation-under-telemetry-loss/
+
+17. W3C. *Trace Context — W3C Recommendation*. https://www.w3.org/TR/trace-context/
+
+18. Ron Kohavi, Alex Deng, Brian Frasca, Toby Walker, Ya Xu, Nils Pohlmann. *Online Controlled Experiments at Large Scale*. Proceedings of the 2013 ACM SIGKDD International Conference on Knowledge Discovery and Data Mining. https://doi.org/10.1145/2487575.2488217

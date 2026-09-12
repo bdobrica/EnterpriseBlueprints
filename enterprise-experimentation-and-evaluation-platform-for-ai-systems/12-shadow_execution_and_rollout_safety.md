@@ -10,7 +10,7 @@ production input
       └────► B ───► shadow result
 ```
 
-Variant B must not create user-visible side effects.
+Variant B must not create production side effects. This includes state mutation, user contact, notifications, business events, analytics contamination, and writes to shared caches or memories.
 
 Writes should be:
 
@@ -63,13 +63,18 @@ Shadow pipelines should have:
 
 ```text
 separate credentials
-restricted network access
-side-effect suppression
+no production write credentials
+deny-by-default network and tool access
+read-only snapshots or replicas
+trusted-gateway side-effect suppression
 independent budgets
 rate limits
+separate caches and mutable state
 execution.purpose = shadow
 ```
 
-Shadow execution should be sampled when running every production request twice would be prohibitively expensive.
+Suppression must be enforced by a trusted gateway or sandbox, not by asking the candidate agent to avoid side effects. A tool is unavailable to shadow execution if safe suppression cannot be enforced. Calls to external model providers still create billing, logging, and possible data-retention effects, so approved provider policy, egress controls, and separate quotas remain necessary.
+
+Copied production inputs follow the same residency, minimization, redaction, retention, and access policies as the original request. Shadow execution should be sampled when running every production request twice would be prohibitively expensive.
 
 ---

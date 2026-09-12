@@ -1,6 +1,6 @@
 ## 14. Offline evaluation and scenario execution
 
-Offline evaluation runs pipeline variants against controlled scenarios.
+Offline evaluation runs pipeline variants against controlled scenarios. It provides comparative evidence under the scenario distribution; without randomized user exposure, it does not estimate causal effects on production user outcomes.
 
 A scenario contains more than a prompt.
 
@@ -52,7 +52,7 @@ containerized dependencies
 or equivalent resettable sandboxes
 ```
 
-The environment is reset between trials.
+The environment is reset between trials. The runner verifies fixture and dependency versions before execution and checks expected state or snapshot hashes afterward so a failed reset cannot silently contaminate later trials.
 
 This is particularly important for stateful agents. Anthropic's current guidance for agent evaluation similarly emphasizes controlled environments, tasks, repeated trials, trajectories, and graders.
 
@@ -73,13 +73,13 @@ A: 5 trials
 B: 5 trials
 ```
 
-The trial ID and repetition number are retained.
+The trial ID and repetition number are retained together with provider region, observed model revision, parameters, seed when supported, and execution time. Trial order is randomized or interleaved across variants so provider drift, caching, and load do not align systematically with one candidate.
 
 ### 14.4 Paired scenarios
 
 A and B should normally execute against the same scenario snapshot.
 
-That prevents accidental dataset-composition differences from being confused with treatment differences.
+That prevents accidental dataset-composition differences from being confused with treatment differences. Analysis uses the scenario as the paired unit and treats repetitions as nested observations; ten repeated calls against one scenario are not ten independent scenarios.
 
 ### 14.5 Replay
 

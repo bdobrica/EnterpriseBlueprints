@@ -7,8 +7,11 @@ Failure behavior is part of the architecture.
 | Experiment UI unavailable | Production execution continues. |
 | Control API unavailable | Existing clients use last-known-good configuration. |
 | Config publication unavailable | New experiments and ramps are delayed. |
+| Last-known-good config expired | Admit no new experiment exposure; serve the declared baseline. Pinned workflows follow the published outage policy. |
+| Regions disagree on active config revision | Mark health degraded and stop new enrollment until convergence. |
 | Local SDK cannot find an experiment | Use declared baseline/default behavior. |
-| Event stream unavailable | Buffer experiment events within bounded limits. |
+| Event stream unavailable | Buffer experiment events in the durable local spool within bounded limits. |
+| Evidence spool full or unavailable | Admit no new experimental exposure; serve baseline and surface the evidence gap after recovery. |
 | Trace backend unavailable | Serving continues; diagnostic telemetry follows buffer/drop policy. |
 | ClickHouse unavailable | Results become stale; serving continues. |
 | Object storage unavailable | Large diagnostic payload capture may degrade; core experiment events continue. |
@@ -42,9 +45,9 @@ If an outage causes assignment or outcome events to be dropped beyond recoverabl
 evidence_gap = true
 ```
 
-and may be marked invalid depending on scale and affected population.
+and may be marked invalid depending on scale, affected population, and whether loss differs by assignment, execution stage, region, or time.
 
-The system should not silently analyze known-incomplete evidence.
+The system should compare expected and observed evidence rates by variant and execution stage. Differential or unbounded loss can bias an estimate even when the absolute missing fraction is small, so the system should not silently analyze known-incomplete evidence.
 
 ### 23.3 Local safety budgets
 

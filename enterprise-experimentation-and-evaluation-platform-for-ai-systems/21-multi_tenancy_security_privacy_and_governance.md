@@ -59,6 +59,8 @@ export dataset
 change retention
 ```
 
+Authorization combines role with tenant, project, environment, resource, and data-classification constraints. Tenant scope comes from the authenticated identity, never a request body. Production publication, exposure increases, raw-data access, and safety overrides require separation of duties where policy demands it; authors cannot satisfy their own approval step.
+
 ### 22.3 Audit
 
 The audit log records:
@@ -74,6 +76,8 @@ dataset publication
 manual decision
 access to sensitive artifacts
 ```
+
+Audit records are append-only, independently retained, and tamper-evident. Raw-payload access is purpose-bound, time-limited, and logged; highly sensitive access can require just-in-time approval.
 
 ### 22.4 Payload privacy
 
@@ -114,6 +118,8 @@ models
 
 are permitted.
 
+Candidate and evaluator content is treated as untrusted. Model-based evaluators have no production tools or credentials, use constrained output schemas, and isolate candidate text from evaluator instructions to limit prompt-injection effects.
+
 ### 22.6 Encryption
 
 The platform should support:
@@ -129,6 +135,6 @@ Content-addressed payload IDs should not accidentally provide cross-tenant equal
 
 ### 22.7 Data deletion
 
-The architecture should allow deletion of sensitive payloads while retaining non-identifying aggregate experiment results when policy permits.
+The architecture should allow deletion of sensitive payloads while retaining non-identifying aggregate experiment results when policy permits. Deletion covers replicas, derived search or vector indexes, exports, caches, and backups under their documented expiration schedules. Tombstones keep replay from restoring erased content.
 
 ---

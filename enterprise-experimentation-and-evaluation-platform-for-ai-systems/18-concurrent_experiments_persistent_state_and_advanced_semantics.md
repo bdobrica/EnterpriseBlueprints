@@ -31,6 +31,8 @@ factorial experiments
 persistent holdouts
 ```
 
+Mutual exclusion does not by itself eliminate interference through shared queues, caches, social networks, accounts, or mutable tools. An experiment declares its interference assumptions. Where spillovers are plausible, the design randomizes at a suitable cluster or isolates the shared resource, and analysis uses cluster-aware uncertainty.
+
 ### 19.2 Persistent treatment state
 
 Agent treatments may modify:
@@ -58,7 +60,7 @@ A later reads B-created memory
 
 This is a form of treatment carryover.
 
-The MVP documents the risk rather than automatically solving it.
+For decision-grade MVP experiments, treatment-created state must remain pinned to the same randomized unit for its useful lifetime, or the state must be isolated or reset. Merely documenting known carryover while allowing subjects to switch treatment is insufficient because the observed contrast no longer identifies the published treatment effect. Experiments that cannot meet one of these conditions remain offline or are explicitly labeled non-causal operational trials.
 
 Future versions can introduce a `state_policy` such as:
 
@@ -108,5 +110,7 @@ decision timestamp
 ```
 
 because the ordinary equal-probability A/B estimator may no longer apply.
+
+Outcome analysis must use the recorded assignment propensity and a method valid for the adaptive policy; dashboards must not reuse the fixed-allocation estimator.
 
 ---

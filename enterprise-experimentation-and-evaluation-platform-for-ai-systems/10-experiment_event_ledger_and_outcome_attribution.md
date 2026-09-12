@@ -12,6 +12,18 @@ feedback
 evaluation
 ```
 
+Every event envelope includes:
+
+```text
+event_id and schema version
+tenant, project, and environment
+producer identity
+source_fact_id when the fact originates elsewhere
+occurred_at, observed_at, and ingested_at
+```
+
+The immutable raw event archive is the authoritative evidence record. Query stores and experiment-unit tables are reproducible materializations from that archive.
+
 ### 11.1 Assignment event
 
 Example:
@@ -23,16 +35,24 @@ Example:
   "experiment_id": "exp-184",
   "iteration_id": "iter-3",
   "assignment_id": "asg-87",
+  "config_revision": 14,
+  "assignment_algorithm": "prf-v1",
+  "key_version": "2026-03",
+  "randomization_namespace": "support-agent",
   "subject_type": "user",
   "subject_id": "user-192",
   "variant_id": "B",
-  "timestamp": "..."
+  "enrollment_bucket": 19381,
+  "variant_bucket": 49852,
+  "allocation_range": "32768..65535",
+  "occurred_at": "...",
+  "observed_at": "..."
 }
 ```
 
 ### 11.2 Exposure event
 
-Exposure associates the experimental unit with the execution in which treatment-specific behavior occurred.
+Exposure associates the experimental unit with the execution in which treatment-specific behavior was admitted. It includes a stable `exposure_id`, exposure-definition version, execution and operation identity, intended pipeline manifest, and event time. At the published treatment boundary, a trusted execution wrapper durably records exposure before admitting dispatch. This observable boundary avoids pretending the ledger can prove completion inside an opaque provider.
 
 ### 11.3 Outcome event
 
@@ -49,6 +69,8 @@ subscription_renewed = true
 ```
 
 The latter should not require an open distributed trace.
+
+An outcome includes a stable `outcome_id`, source fact identity, metric source and version, subject or execution scope, value, and event time. A source correction or deletion appends a correction or retraction referencing the prior fact; consumers never infer the latest truth by silently overwriting history.
 
 ### 11.4 Feedback event
 
@@ -95,7 +117,13 @@ label
 metadata
 ```
 
-### 11.6 Event transport
+### 11.6 Attribution and materialization
+
+Outcome attribution is a deterministic, versioned transformation. It specifies the subject join, assignment anchor, observation window, time-zone behavior, deduplication, correction precedence, and treatment-blind handling of missing and late facts. Facts are never selected or excluded according to the assigned variant.
+
+Each materialized row retains the assignment, metric-definition version, attribution version, source watermark, and contributing fact IDs. Rebuilding from the same archive and versions must produce the same result. A changed attribution rule creates a new analysis revision.
+
+### 11.7 Event transport
 
 CloudEvents is a suitable optional envelope because it standardizes common event metadata while leaving domain payload semantics to the application.
 
