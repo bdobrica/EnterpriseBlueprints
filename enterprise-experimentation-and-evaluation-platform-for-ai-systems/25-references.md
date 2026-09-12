@@ -1,31 +1,31 @@
 ## 26. References
 
-1. Ron Kohavi, Diane Tang, Ya Xu. *Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing*. Cambridge University Press, 2020.
+1. Ron Kohavi, Diane Tang, Ya Xu. *Trustworthy Online Controlled Experiments: A Practical Guide to A/B Testing*. Cambridge University Press, 2020. https://www.cambridge.org/core/books/trustworthy-online-controlled-experiments/D97B26382EB0EB2DC2019A7A7B518F59
 
-2. Somit Gupta, Liudmila Ulanova, Sumit Bhardwaj, Pavel Dmitriev, Paul Raff, Aleksander Fabijan. *The Anatomy of a Large-Scale Experimentation Platform*. IEEE ICSA, 2018. The paper describes experimentation portal, execution, log processing, and analysis as distinct platform concerns.
+2. Somit Gupta, Liudmila (Lucy) Ulanova, Sumit Bhardwaj, Pavel Dmitriev, Paul Raff, Aleksander Fabijan. *The Anatomy of a Large-Scale Experimentation Platform*. IEEE ICSA, 2018. https://doi.org/10.1109/ICSA.2018.00009
 
-3. Alexander Ivaniuk, Weitao Duan. *A/B testing at LinkedIn: Assigning variants at scale*. LinkedIn Engineering, 2020. Relevant to deterministic hashing, local assignment, allocation correctness, and experiment independence.
+3. Alexander Ivaniuk, Weitao Duan. *A/B testing at LinkedIn: Assigning variants at scale*. LinkedIn Engineering, 2020. https://www.linkedin.com/blog/engineering/ab-testing-experimentation/a-b-testing-variant-assignment
 
-4. Diane Tang, Ashish Agarwal, Deirdre O'Brien, Mike Meyer. *Overlapping Experiment Infrastructure: More, Better, Faster Experimentation*. KDD, 2010. Relevant to experiment layers and overlapping experimentation.
+4. Diane Tang, Ashish Agarwal, Deirdre O'Brien, Mike Meyer. *Overlapping Experiment Infrastructure: More, Better, Faster Experimentation*. KDD, 2010. https://doi.org/10.1145/1835804.1835810
 
-5. Aleksander Fabijan et al. *Diagnosing Sample Ratio Mismatch in Online Controlled Experiments: A Taxonomy and Rules of Thumb for Practitioners*. KDD, 2019. Relevant to SRM as an experiment trustworthiness and data-quality check.
+5. Aleksander Fabijan et al. *Diagnosing Sample Ratio Mismatch in Online Controlled Experiments: A Taxonomy and Rules of Thumb for Practitioners*. KDD, 2019. https://doi.org/10.1145/3292500.3330722
 
-6. Microsoft Experimentation Platform. *Alerting in Microsoft's Experimentation Platform*. Relevant to operational SRM monitoring and experiment safety.
+6. Microsoft Experimentation Platform. *Alerting in Microsoft's Experimentation Platform*. https://www.microsoft.com/en-us/research/articles/alerting-in-microsofts-experimentation-platform-exp/
 
-7. Alex Deng, Ya Xu, Ron Kohavi, Toby Walker. *Improving the Sensitivity of Online Controlled Experiments by Utilizing Pre-Experiment Data*. WSDM, 2013. Introduces CUPED variance reduction using pre-experiment covariates.
+7. Alex Deng, Ya Xu, Ron Kohavi, Toby Walker. *Improving the Sensitivity of Online Controlled Experiments by Utilizing Pre-Experiment Data*. WSDM, 2013. https://doi.org/10.1145/2433396.2433413
 
-8. Anthropic. *Demystifying evals for AI agents*. 2026. Relevant to tasks, trials, trajectories, environments, deterministic graders, model-based graders, and evaluation of stochastic agents.
+8. Anthropic. *Demystifying evals for AI agents*. 2026. https://www.anthropic.com/engineering/demystifying-evals-for-ai-agents
 
-9. OpenTelemetry. *Semantic Conventions*. Relevant to vendor-neutral tracing and common telemetry semantics.
+9. OpenTelemetry. *Semantic Conventions*. https://opentelemetry.io/docs/specs/semconv/
 
-10. OpenTelemetry. *Baggage*. Relevant to contextual propagation and its security and integrity limitations.
+10. OpenTelemetry. *Baggage*. https://opentelemetry.io/docs/specs/otel/baggage/
 
-11. Cloud Native Computing Foundation. *CloudEvents*. Relevant to portable event-envelope semantics for the experiment event ledger.
+11. Cloud Native Computing Foundation. *CloudEvents*. https://github.com/cloudevents/spec
 
-12. Statsig. *Online Evals*. Current AI experimentation documentation describing production evaluation and shadow candidate execution.
+12. Statsig. *Online Evals*. https://docs.statsig.com/ai-evals/online-evals
 
-13. Microsoft Experimentation Platform. *Patterns of Trustworthy Experimentation: During-Experiment Stage*. Relevant to SRM checks, monitoring, and auto-shutdown of harmful treatments.
+13. Microsoft Experimentation Platform. *Patterns of Trustworthy Experimentation: During-Experiment Stage*. https://www.microsoft.com/en-us/research/group/experimentation-platform-exp/articles/patterns-of-trustworthy-experimentation-during-experiment-stage/
 
-14. Microsoft Experimentation Platform. *Experimentation Platform Publications*. Collection covering controlled rollout, metric design, variance reduction, trustworthy analysis, and experimentation at scale.
+14. Microsoft Experimentation Platform. *Experimentation Platform Publications*. https://www.microsoft.com/en-us/research/group/experimentation-platform-exp/publications/
 
-15. OpenTelemetry. *Signals*. Background on traces, metrics, logs, baggage, and telemetry signal separation.
+15. OpenTelemetry. *Signals*. https://opentelemetry.io/docs/concepts/signals/
