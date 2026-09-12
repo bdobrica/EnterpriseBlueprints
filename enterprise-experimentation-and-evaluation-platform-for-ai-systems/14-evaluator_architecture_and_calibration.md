@@ -66,14 +66,10 @@ The platform maintains a human-labelled calibration dataset.
 
 Periodically:
 
-```text
-judge output
-      │
-      ▼
-compare with human labels
-      │
-      ▼
-agreement / error analysis
+```mermaid
+flowchart TD
+    judge[Judge output] --> compare[Compare with human labels]
+    compare --> analysis[Agreement and error analysis]
 ```
 
 Calibration measures agreement, false-positive and false-negative rates, abstention, and uncertainty on representative slices. Aggregate agreement alone can hide poor performance on a safety-critical language, customer segment, or task class.

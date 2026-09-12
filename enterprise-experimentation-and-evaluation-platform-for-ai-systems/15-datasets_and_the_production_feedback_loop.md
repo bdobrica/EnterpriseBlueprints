@@ -67,29 +67,16 @@ Access to held-out sets can be restricted, with labels hidden from candidate aut
 
 The intended lifecycle is:
 
-```text
-production
-    │
-    ▼
-interesting traces / outcomes
-    │
-    ▼
-scenario authoring
-    │
-    ▼
-dataset snapshot
-    │
-    ▼
-offline paired comparison
-    │
-    ▼
-shadow candidate
-    │
-    ▼
-production experiment
-    │
-    ▼
-new production evidence
+```mermaid
+flowchart TD
+    production[Production] --> evidence[Interesting traces and outcomes]
+    evidence --> authoring[Scenario authoring]
+    authoring --> snapshot[Dataset snapshot]
+    snapshot --> offline[Offline paired comparison]
+    offline --> shadow[Shadow candidate]
+    shadow --> experiment[Production experiment]
+    experiment --> newEvidence[New production evidence]
+    newEvidence --> authoring
 ```
 
 Offline evidence does not replace the production experiment.

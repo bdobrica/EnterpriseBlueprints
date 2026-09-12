@@ -2,26 +2,15 @@
 
 An experiment should have an explicit lifecycle.
 
-```text
-DRAFT
-  │
-  ▼
-VALIDATED
-  │
-  ▼
-READY
-  │
-  ▼
-RUNNING ─────► PAUSED
-  │              │
-  │              └────► RUNNING
-  │
-  ├────► ABORTED
-  │
-  ├────► INVALID
-  │
-  ▼
-COMPLETED
+```mermaid
+flowchart TD
+    draft[DRAFT] --> validated[VALIDATED]
+    validated --> ready[READY]
+    ready --> running[RUNNING]
+    running <--> paused[PAUSED]
+    running --> aborted[ABORTED]
+    running --> invalid[INVALID]
+    running --> completed[COMPLETED]
 ```
 
 ### 6.1 Draft

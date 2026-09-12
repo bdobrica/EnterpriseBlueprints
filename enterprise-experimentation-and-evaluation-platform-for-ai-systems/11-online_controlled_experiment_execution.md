@@ -2,43 +2,24 @@
 
 An online experiment follows this flow:
 
-```text
-request
-   │
-   ▼
-resolve randomization subject
-   │
-   ▼
-evaluate eligibility
-   │
-   ▼
-evaluate pre-treatment trigger
-   │
-   ▼
-deterministic local assignment
-   │
-   ▼
-durably spool assignment
-   │
-   ▼
-execute assigned pipeline
-   │
-   ├── durable exposure at each published treatment boundary
-   │
-   ├── trace
-   │
-   ├── operational metrics
-   │
-   └── immediate outcomes
-   │
-   ▼
-later business outcomes
-   │
-   ▼
-experiment-unit materialization
-   │
-   ▼
-statistical analysis
+```mermaid
+flowchart TD
+    request[Request] --> subject[Resolve randomization subject]
+    subject --> eligibility[Evaluate eligibility]
+    eligibility --> trigger[Evaluate pre-treatment trigger]
+    trigger --> assignment[Deterministic local assignment]
+    assignment --> spool[Durably spool assignment]
+    spool --> execute[Execute assigned pipeline]
+    execute --> exposure[Durable exposure at each published treatment boundary]
+    execute --> trace[Trace]
+    execute --> metrics[Operational metrics]
+    execute --> immediate[Immediate outcomes]
+    exposure --> later[Later business outcomes]
+    trace --> materialize[Experiment-unit materialization]
+    metrics --> materialize
+    immediate --> materialize
+    later --> materialize
+    materialize --> analysis[Statistical analysis]
 ```
 
 ### 12.1 Eligibility

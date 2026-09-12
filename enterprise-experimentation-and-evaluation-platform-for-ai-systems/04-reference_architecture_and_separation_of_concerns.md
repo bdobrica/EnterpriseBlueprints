@@ -2,83 +2,46 @@
 
 The architecture separates the serving-critical path from measurement and analysis.
 
-```text
-                         ┌───────────────────────────┐
-                         │      Web UI / API         │
-                         └─────────────┬─────────────┘
-                                       │
-                         ┌─────────────▼─────────────┐
-                         │      CONTROL SERVICE      │
-                         │                           │
-                         │ Experiment Registry       │
-                         │ Pipeline Registry         │
-                         │ Dataset Registry          │
-                         │ Evaluator Registry        │
-                         │ Metric Registry           │
-                         │ Governance / Audit        │
-                         └─────────────┬─────────────┘
-                                       │
-                              config publication
-                                       │
-                         ┌─────────────▼─────────────┐
-                         │   VERSIONED CONFIG CACHE  │
-                         └─────────────┬─────────────┘
-                                       │
-                             local SDK evaluation
-                                       │
-          ┌────────────────────────────┼─────────────────────────┐
-          │                            │                         │
-          ▼                            ▼                         ▼
-    Application                  Agent Runtime              Model Gateway
-          │                            │                         │
-          └────────────────────────────┼─────────────────────────┘
-                                       │
-                                   execution
-                                       │
-                   ┌───────────────────┴───────────────────┐
-                   │                                       │
-                   ▼                                       ▼
-             OpenTelemetry                    Durable evidence spool
-                                                        │
-                                                 Experiment Events
-                   │                                       │
-                   └───────────────────┬───────────────────┘
-                                       ▼
-                              Ingestion Services
-                                       │
-                              NATS / Kafka
-                                       │
-            ┌──────────────────────────┼───────────────────────┐
-            │                          │                       │
-            ▼                          ▼                       ▼
-        ClickHouse                Object Storage          Eval Queue
-       derived analytics      canonical event archive         │
-                              and versioned artifacts          │
-                                                             ▼
-                                                      Evaluator Workers
+```mermaid
+flowchart TB
+    ui[Web UI / API] --> control[Control service<br/>registries<br/>governance and audit]
+    control -->|config publication| cache[Versioned config cache]
 
-                      ┌──────────────────────────┐
-                      │      Analysis Engine     │
-                      │                          │
-                      │ experiment health        │
-                      │ metric materialization   │
-                      │ confidence intervals     │
-                      │ fixed-horizon analysis   │
-                      └─────────────┬────────────┘
-                                    │
-                                    ▼
-                              Experiment Result
+    subgraph Serving[Serving and execution]
+        app[Application] --> sdk[Local decision SDK]
+        runtime[Agent runtime]
+        gateway[Model gateway]
+        sdk --> runtime
+        runtime --> gateway
+    end
 
+    cache --> sdk
+    runtime --> otel[OpenTelemetry]
+    runtime --> spool[Durable evidence spool]
+    spool --> events[Experiment events]
+    otel --> ingest[Ingestion services]
+    events --> ingest
+    ingest --> broker[NATS / Kafka]
 
-          ┌──────────────── OFFLINE / SHADOW ────────────────┐
-          │                                                   │
-          │ Dataset → Scenario Runner → Resettable Sandbox    │
-          │                      │                            │
-          │                   Pipeline A/B                    │
-          │                      │                            │
-          │                    traces                         │
-          │                    evals                          │
-          └───────────────────────────────────────────────────┘
+    subgraph Storage[Evidence and analytical storage]
+        ch[ClickHouse<br/>derived analytics and traces]
+        archive[Object storage<br/>canonical event archive and artifacts]
+        queue[Evaluation queue] --> workers[Evaluator workers]
+    end
+
+    broker --> ch
+    broker --> archive
+    broker --> queue
+    ch --> analysis[Analysis engine<br/>health, materialization, intervals, fixed-horizon analysis]
+    archive --> analysis
+    analysis --> result[Experiment result]
+
+    subgraph Offline[Offline and shadow evaluation]
+        dataset[Dataset] --> runner[Scenario runner]
+        runner --> sandbox[Resettable sandbox]
+        sandbox --> pipelines[Pipeline A / B]
+        pipelines --> offlineEvidence[Traces and evaluations]
+    end
 ```
 
 ### 5.1 Control plane

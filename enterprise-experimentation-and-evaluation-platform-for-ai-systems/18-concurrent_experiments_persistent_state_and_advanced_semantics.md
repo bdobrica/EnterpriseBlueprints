@@ -50,12 +50,10 @@ That state can survive beyond the original exposure.
 
 For example:
 
-```text
-B writes memory
-      │
-experiment changes
-      │
-A later reads B-created memory
+```mermaid
+flowchart TD
+    write[B writes memory] --> change[Experiment changes]
+    change --> read[A later reads B-created memory]
 ```
 
 This is a form of treatment carryover.
@@ -79,16 +77,12 @@ after_experiment:
 
 A trace can record explicit handoffs:
 
-```text
-Planner
-   │
-HANDOFF
-   │
-Retriever
-   │
-HANDOFF
-   │
-Executor
+```mermaid
+flowchart TD
+    planner[Planner] --> handoff1[HANDOFF]
+    handoff1 --> retriever[Retriever]
+    retriever --> handoff2[HANDOFF]
+    handoff2 --> executor[Executor]
 ```
 
 This enables failure localization and component diagnostics.

@@ -2,12 +2,10 @@
 
 Shadow execution runs a candidate asynchronously against copies of production inputs.
 
-```text
-production input
-      │
-      ├────► A ───► user-visible result
-      │
-      └────► B ───► shadow result
+```mermaid
+flowchart LR
+    input[Production input] --> control[A<br/>user-visible result]
+    input --> candidate[B<br/>shadow result]
 ```
 
 Variant B must not create production side effects. This includes state mutation, user contact, notifications, business events, analytics contamination, and writes to shared caches or memories.

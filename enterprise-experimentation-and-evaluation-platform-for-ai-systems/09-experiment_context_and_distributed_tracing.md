@@ -68,18 +68,13 @@ Before calling external model providers or third-party tools, experimentation co
 
 A representative trace is:
 
-```text
-AGENT support-agent
-│
-├── RETRIEVER memory-service
-│
-├── LLM model-x
-│
-├── TOOL customer-lookup
-│
-├── TOOL refund
-│
-└── LLM model-x
+```mermaid
+flowchart TD
+    agent[AGENT support-agent] --> retriever[RETRIEVER memory-service]
+    retriever --> llm1[LLM model-x]
+    llm1 --> lookup[TOOL customer-lookup]
+    lookup --> refund[TOOL refund]
+    refund --> llm2[LLM model-x]
 ```
 
 Tracing helps answer questions such as:

@@ -1,6 +1,6 @@
 # Designing an Enterprise Experimentation and Evaluation Platform for AI Systems
 
-**Current version:** 0.2.0
+**Current version:** 0.3.0
 
 This document describes a vendor-neutral architecture for evaluating changes to AI systems through offline evaluation, shadow execution, and online controlled experimentation. The platform treats models, prompts, retrieval systems, memory, tools, agent runtimes, policies, and complete agent pipelines as versioned treatments that can be evaluated using a common evidence model.
 

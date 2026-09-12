@@ -9,7 +9,7 @@ The repository is not limited to AI systems. Its purpose is to capture reusable 
 | Blueprint | Description | Version |
 | --- | --- | --- |
 | [Enterprise Execution Platform for AI Agents](enterprise-execution-platform-for-ai-agents/README.md) | A vendor-neutral architecture for governing, executing, and auditing durable AI agents while keeping identity, authority, credentials, side effects, and evidence outside replaceable agent harnesses. | 0.5.0 |
-| [Enterprise Experimentation and Evaluation Platform for AI Systems](enterprise-experimentation-and-evaluation-platform-for-ai-systems/README.md) | A vendor-neutral architecture for evaluating AI system changes through offline evaluation, shadow execution, and online controlled experimentation with immutable pipeline identity, durable evidence, and statistically valid analysis. | 0.2.0 |
+| [Enterprise Experimentation and Evaluation Platform for AI Systems](enterprise-experimentation-and-evaluation-platform-for-ai-systems/README.md) | A vendor-neutral architecture for evaluating AI system changes through offline evaluation, shadow execution, and online controlled experimentation with immutable pipeline identity, durable evidence, and statistically valid analysis. | 0.3.0 |
 
 Additional reference architectures will be added as the repository evolves.
 
